@@ -59,6 +59,7 @@
   "files.associations": {
     "stdlib.h": "c",
     "stdio.h": "c",
-    "algoritmogenetico.h": "c"
+    "algoritmogenetico.h": "c",
+    "geometria.h": "c"
   }
 }
