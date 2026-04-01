@@ -9,8 +9,8 @@
 
 // PONTO (x, y) ----------------------------------------------------------
 typedef struct geo_0{
-    float x;
-    float y;
+    double x;
+    double y;
 }ponto;
 
 ponto criarPonto(int x, int y);
@@ -19,8 +19,8 @@ ponto criarPontoAleatorio();
 
 // RETA (y = ax + b) -----------------------------------------------------
 typedef struct {
-    float a;
-    float b;
+    double a;
+    double b;
 }reta;
 
 float calcularXReta(reta reta, float y);
