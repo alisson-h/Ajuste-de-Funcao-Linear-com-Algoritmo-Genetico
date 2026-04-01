@@ -18,6 +18,13 @@ problema* ConstruirProblemaBase(int n, int m, int g){
     return p;
 }
 
+void deletarSolucao(solucao* sol){
+    free(sol->erros);
+    free(sol->fitness);
+    free(sol->retas);
+    free(sol);
+}
+
 // FUNÇOES IMPORTANTES ---------------------------------------------------
 float calcularErroAbsolutoMedio(reta reta, dataset data_set){
     float MAE = 0;
