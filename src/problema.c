@@ -26,7 +26,7 @@ void deletarSolucao(solucao* sol){
 }
 
 // FUNÇOES IMPORTANTES ---------------------------------------------------
-float calcularErroAbsolutoMedio(reta reta, dataset data_set){
+float calcularMAE(reta reta, dataset data_set){
     float MAE = 0;
 
     for (int i = 0; i < data_set.quantidade_pontos; i++)
@@ -42,6 +42,24 @@ float calcularErroAbsolutoMedio(reta reta, dataset data_set){
     MAE /= data_set.quantidade_pontos;
 
     return MAE;
+}
+
+float calcularMSE(reta reta, dataset data_set){
+    float MSE = 0;
+
+    for (int i = 0; i < data_set.quantidade_pontos; i++)
+    {
+        ponto ponto = data_set.lista_pontos[i];
+        
+        float resultado = ponto.y - calcularYReta(reta, ponto.x);
+        resultado *= resultado;
+        
+        MSE += resultado;
+    }
+
+    MSE /= data_set.quantidade_pontos;
+
+    return MSE;
 }
 
 void ExibirProblema(problema* problema){

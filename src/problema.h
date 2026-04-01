@@ -30,8 +30,5 @@ float calcularMSE(reta reta, dataset data_set);
 
 
 void ExibirProblema(problema* problema);
-// FUNÇOES IMPORTANTES ---------------------------------------------------
-float calcularErroAbsolutoMedio(reta reta, dataset data_set);
-
 
 #endif
