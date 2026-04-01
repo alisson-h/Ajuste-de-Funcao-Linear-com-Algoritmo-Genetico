@@ -8,5 +8,6 @@
 
 problema* lerInputParaProblema();
 
+void criarSaida(problema* prob, solucao* sol);
 
 #endif
