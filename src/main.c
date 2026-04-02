@@ -4,10 +4,10 @@
 
 #include "problema.h"
 #include "leitor.h"
-#include "funcoesAG.h"
+#include "algoritmoGenetico.h"
 
 int main(){
-    // INICIO ---------------
+    // INICIO ----------------------
     srand(73);
     clock_t tempo_inicial = clock();
 
@@ -18,15 +18,11 @@ int main(){
     }
     // -----------------------------
 
-    //ExibirProblema(problema);
-
     // EXECUÇÃO --------------------
     solucao* solucao = AlgoritmoGenetico(problema);
     // -----------------------------
 
-
-    // FINAL -----------------
-    //deletarDados(dados);
+    // FINAL -----------------------
     clock_t tempo_final = clock();
     double tempo_algoritmo = (double)(tempo_final - tempo_inicial) / CLOCKS_PER_SEC;
 

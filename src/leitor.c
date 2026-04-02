@@ -1,5 +1,4 @@
 #include "leitor.h"
-#include "problema.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,7 +37,7 @@ problema* lerInputParaProblema(){
     return prob;
 }
 
-void criarSaida(problema* prob, solucao* sol){
+void criarOutput(problema* prob, solucao* sol){
     FILE *arq = fopen("config/output.dat", "w");
 
     if (arq == NULL) {

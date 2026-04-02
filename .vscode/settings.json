@@ -60,6 +60,6 @@
     "stdlib.h": "c",
     "stdio.h": "c",
     "algoritmogenetico.h": "c",
-    "geometria.h": "c"
+    "problema.h": "c"
   }
 }
