@@ -24,7 +24,8 @@ solucao* ConstruirSolucaoBase(int quantidade_geracoes){
     sol->erros = (double *) malloc(sizeof(double) * quantidade_geracoes);
     sol->fitness = (double *) malloc(sizeof(double) * quantidade_geracoes);
     sol->retas = (reta *) malloc(sizeof(reta) * quantidade_geracoes); 
-
+    sol->geracao_final = -1;
+    
     return sol;
 }
 

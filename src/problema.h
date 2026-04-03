@@ -45,7 +45,8 @@ typedef struct {
     double* fitness;
     reta* retas;
     double* erros;
-
+    int geracao_final;
+    
 } solucao;
 
 /**
