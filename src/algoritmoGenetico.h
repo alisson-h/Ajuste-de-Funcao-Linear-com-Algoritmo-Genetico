@@ -49,21 +49,14 @@ void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int i
 void avaliarPopulacaoMSE(cromossomo* populacao, int quantidade_individuos, dataset data_set);
 
 /**
- * @brief 
+ * @brief Particiona a população de cromossomos para o algoritmo QuickSelect.
+ * @param pop A lista dinâmica de cromossomos a ser particionada.
+ * @param inicio O índice de início do segmento da população a ser considerado.
+ * @param fim O índice de fim do segmento da população a ser considerado.
+ * @return O índice do elemento particionado.
  */
-void swap(cromossomo *a, cromossomo *b);
-
-/**
- * @brief 
- */
-void quickSort(cromossomo* arr, int low, int high);
-
-/**
- * @brief
- */
-int partition(cromossomo arr[], int low, int high);
-
 int particiona(cromossomo* pop, int inicio, int fim);
+
 /**
  * @brief Realiza o algoritmo de seleção QuickSelect para encontrar o k-ésimo menor elemento na população de cromossomos.
  * @param pop A lista dinâmica de cromossomos a ser processada.
