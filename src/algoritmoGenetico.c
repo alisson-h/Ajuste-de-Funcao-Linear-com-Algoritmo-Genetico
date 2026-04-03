@@ -168,10 +168,11 @@ void mutacaoPopulacao(cromossomo* populacao, int quantidade_eletismo, int quanti
     for (int i = quantidade_eletismo; i < quantidade_individuos; i++){
         if ((double) rand() / RAND_MAX < taxa_mutacao){
             cromossomo* cromo = &populacao[i];
+            // Mutação: altera aleatoriamente o coeficiente a ou b, com um valor entre -0.2 e 0.2 (com até 5 casas decimais)
             if ((double) rand() / RAND_MAX < 0.5)
-                cromo->reta.a +=  ((rand() % (2 * 200 + 1)) - 200) / (500.0);
+                cromo->reta.a +=  ((rand() % (2 * 20000 + 1)) - 20000) / (100000.0);
             else{
-                cromo->reta.b +=  ((rand() % (2 * 200 + 1)) - 200) / (500.0);
+                cromo->reta.b +=  ((rand() % (2 * 20000 + 1)) - 20000) / (100000.0);
             }
         }
     }
