@@ -37,17 +37,17 @@ problema* lerInputParaProblema(){
     return prob;
 }
 
-void criarOutput(problema* prob, solucao* sol){
-    FILE *arq = fopen("config/output.dat", "w");
+void criarOutput(solucao* sol){
+    FILE *arq = fopen("outputs/output.dat", "w");
 
     if (arq == NULL) {
         printf("Erro ao criar/ediar arquivo\n");
         return;
     }
     
-    for (int i = 0; i < prob->parametros_AG.quantidade_geracoes; i++){
-        fprintf(arq,"Geracao %i:\nMelhor fitness: %lf\nErro: %lf\nReta: (a = %lf,b= %lf)\n\n",
-        i, sol->fitness[i], sol->erros[i], sol->retas[i].a, sol->retas[i].b);
+    for (int i = 0; i < sol->geracao_final; i++){
+        fprintf(arq,"G %3.d | fitness: %lf | reta: (a = %lf, b = %lf)\n",
+        i + 1, sol->fitness[i], sol->retas[i].a, sol->retas[i].b);
     }
 
     fclose(arq);

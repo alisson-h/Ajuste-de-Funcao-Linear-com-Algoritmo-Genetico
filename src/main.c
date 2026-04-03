@@ -26,7 +26,7 @@ int main(){
     clock_t tempo_final = clock();
     double tempo_algoritmo = (double)(tempo_final - tempo_inicial) / CLOCKS_PER_SEC;
 
-    criarOutput(problema, solucao);
+    criarOutput(solucao);
 
     printf("Tempo de execucao: %f segundos\n", tempo_algoritmo);
     

@@ -14,9 +14,8 @@ problema* lerInputParaProblema();
 
 /**
  * @brief Cria o arquivo de saída (output.dat) com a solução encontrada.
- * @param prob O problema para o qual a solução foi encontrada.
  * @param sol A solução encontrada para o problema. 
  */
-void criarOutput(problema* prob, solucao* sol);
+void criarOutput(solucao* sol);
 
 #endif
