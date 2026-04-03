@@ -28,7 +28,7 @@ int main(){
 
     criarOutput(solucao);
 
-    printf("Tempo de execucao: %f segundos\n", tempo_algoritmo);
+    printf("Tempo de execucao: %g segundos\n", tempo_algoritmo);
     
     deletarSolucao(solucao);
     free(problema);
