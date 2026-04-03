@@ -1,6 +1,9 @@
 #include "algoritmoGenetico.h"
+#include <math.h>
 
 #define EXIBIR_GERACOES 0
+#define EXIBIR_INFORMACOES_FINAIS 1
+
 #define PRECISAO 1000
 #define LIMITE 10
 #define ALCANCE LIMITE * PRECISAO
@@ -24,7 +27,7 @@ solucao* AlgoritmoGenetico(problema* p){
     
     cromossomo populacao[parametros_AG.quantidade_individuos];
     gerarPopulacaoInicial(populacao, quantidade_individuos);
-    avaliarPopulacaoMAE(populacao, quantidade_individuos, data_set);
+    avaliarPopulacaoMAE(populacao, quantidade_individuos, 0, data_set);
     
     populacao[0].reta.a = 0.001;
     populacao[0].reta.b = 1;
@@ -32,34 +35,46 @@ solucao* AlgoritmoGenetico(problema* p){
     // Inicializando Solucao ---------------------------------------------
     solucao* sol = ConstruirSolucaoBase(quantidade_geracoes);
     cromossomo melhor_individuo = populacao[0];
+
     // Algoritmo ---------------------------------------------------------
-    for (int geracao_atual = 0; geracao_atual < quantidade_geracoes; geracao_atual++){
+    printf("\nIniciando Algoritmo Genetico...\n");
+    int geracao_atual = 0;
+    for (geracao_atual = 0; geracao_atual < quantidade_geracoes; geracao_atual++){
         
         quickSelect(populacao, 0, quantidade_individuos - 1, quantidade_individuos_selecionados - 1);
         quickSelect(populacao, 0, (int) quantidade_individuos * 0.6 - 1, quantidade_eletismo - 1);
 
         gerarNovaPopulacao(populacao, parametros_AG, quantidade_eletismo, quantidade_individuos_selecionados);
         
-        avaliarPopulacaoMAE(populacao, quantidade_individuos, data_set);
+        avaliarPopulacaoMAE(populacao, quantidade_individuos, quantidade_individuos_selecionados, data_set);
         
         melhor_individuo = populacao[0];
         if (EXIBIR_GERACOES){
-            printf("Geracao: %d\n", geracao_atual + 1);
-            printf("Melhor Fitness: %f\n\n", melhor_individuo.fitness);
-            printf("Melhor Reta: %fx + %f\n\n", melhor_individuo.reta.a, melhor_individuo.reta.b);
+            printf("G %3.d | fitness: %lf | reta: (a = %lf, b = %lf)\n",
+            geracao_atual + 1, melhor_individuo.fitness, melhor_individuo.reta.a, melhor_individuo.reta.b);
         }
 
         sol->erros[geracao_atual] = calcularMAE(melhor_individuo.reta, data_set);
         sol->fitness[geracao_atual] = melhor_individuo.fitness;
         sol->retas[geracao_atual] = melhor_individuo.reta;
 
-        //if  (sol->fitness[geracao_atual] == 0) break; //Encerra o algoritmo se encontrar a solução perfeita (fitness = 0)
+        //Encerrar o algoritmo se encontrar a solução perfeita (fitness = 0)
+        //só funciona quando os pontos coincidem perfeitamente em uma reta
+        if (fabs(sol->fitness[geracao_atual]) < 1e-9) break;
     }
-    
-    printf("Algoritmo Finalizado...\n\n");
-    printf("Melhor Fitness: %f\n\n", melhor_individuo.fitness);
-    char sign = melhor_individuo.reta.b < 0 ? '-' : '+';
-    printf("Melhor Reta: %fx %c %f\n\n", melhor_individuo.reta.a, sign, melhor_individuo.reta.b);
+    sol->geracao_final = geracao_atual;
+
+    printf("\nAlgoritmo Finalizado.\n\n");
+
+    if (EXIBIR_INFORMACOES_FINAIS)
+    {
+       printf("Melhor Fitness: %f\n\n", melhor_individuo.fitness);
+        char sign = '+';
+        if (melhor_individuo.reta.b <= 0) { melhor_individuo.reta.b *= -1; sign = '-'; }
+        if ( fabs(melhor_individuo.reta.a) < 1e-6) printf("Melhor Reta: y =  %c %g\n\n", sign, melhor_individuo.reta.b);
+        else if ( fabs(melhor_individuo.reta.b) < 1e-6) printf("Melhor Reta: y = %gx\n\n", melhor_individuo.reta.a);
+        else printf("Melhor Reta: %gx %c %g\n\n", melhor_individuo.reta.a, sign, melhor_individuo.reta.b);
+    }
     
     return sol;
 }
@@ -78,8 +93,9 @@ void gerarPopulacaoInicial(cromossomo* populacao, int quantidade_individuos){
     
 }
 
-void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, dataset data_set){
-    for (int i = 0; i < quantidade_individuos; i++){
+void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int inicio, dataset data_set){
+
+    for (int i = inicio; i < quantidade_individuos; i++){
         populacao[i].fitness = 1;
         populacao[i].fitness = calcularMAE(populacao[i].reta, data_set);
     }
@@ -125,7 +141,6 @@ void quickSelect(cromossomo* pop, int inicio, int fim, int k){
     else
         quickSelect(pop, pos + 1, fim, k);
 }
-
 
 void crossoverPopulacao(cromossomo* populacao, int quantidade_individuos, int quantidade_selecionados, double taxa_crossover){
     for (int i = quantidade_selecionados; i < quantidade_individuos - 1; i += 2){

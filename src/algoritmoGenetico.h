@@ -38,7 +38,7 @@ void gerarPopulacaoInicial(cromossomo* populacao, int quantidade_individuos);
  * @param quantidade_individuos O número de indivíduos na população.
  * @param data_set O conjunto de dados usado para avaliar os cromossomos.
  */
-void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, dataset data_set);
+void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int inicio, dataset data_set);
 
 /**
  * @brief Avalia a população de cromossomos usando o Erro Quadrático Médio (MSE).
@@ -74,16 +74,29 @@ int particiona(cromossomo* pop, int inicio, int fim);
 void quickSelect(cromossomo* pop, int inicio, int fim, int k);
 
 /**
- * @brief Realiza a mutação em um cromossomo, alterando seus genes de forma aleatória.
- * @param cromossomo O cromossomo a ser mutado.
+ * @brief Realiza o crossover aritmético entre os cromossomos selecionados.
+ * @param populacao A lista dinâmica de cromossomos que representa a população.
+ * @param quantidade_individuos O número de indivíduos na população.
+ * @param quantidade_selecionados O número de indivíduos selecionados para reprodução.
+ * @param taxa_crossover A taxa de crossover.
  */
-void mutacao(cromossomo* cromossomo);
+void crossoverPopulacao(cromossomo* populacao, int quantidade_individuos, int quantidade_selecionados, double taxa_crossover);
+
+/**
+ * @brief Realiza a mutação em um cromossomo, alterando seus genes de forma aleatória.
+ * @param populacao A lista dinâmica de cromossomos que representa a população.
+ * @param quantidade_eletismo O número de indivíduos a serem mantidos inalterados nanova população (elitismo).
+ * @param quantidade_individuos O número total de indivíduos na população.
+ * @param taxa_mutacao A taxa de mutação.
+ */
+void mutacaoPopulacao(cromossomo* populacao, int quantidade_eletismo, int quantidade_individuos, double taxa_mutacao);
 
 /**
  * @brief Gera uma nova população de cromossomos a partir da população atual, aplicando seleção, crossover e mutação.
  * @param populacao A lista dinâmica de cromossomos que representa a população atual.
  * @param parametros_AG Os parâmetros do algoritmo genético.
- * @param geracao_atual O número da geração atual.
+ * @param quantidade_eletismo O número de indivíduos a serem mantidos inalterados na nova população (elitismo).
+ * @param quantidade_individuos_selecionados O número de indivíduos a serem selecionados para reprodução na nova população.
  */
 void gerarNovaPopulacao(cromossomo* populacao, parametrosAG parametros_AG, int quantidade_eletismo, int quantidade_individuos_selecionados);
 
