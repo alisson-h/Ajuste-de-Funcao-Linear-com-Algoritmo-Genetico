@@ -30,7 +30,7 @@ void aleatorizarCromossomo(cromossomo* cromossomo);
  * @param populacao A lista dinâmica de cromossomos que representa a população.
  * @param quantidade_individuos O número de indivíduos na população.
  */
-void gerarPopulacaoInicial(cromossomo* populacao, int quantidade_individuos);
+void gerarPopulacaoInicial(cromossomo* populacao, dataset data_set, int quantidade_individuos);
 
 /**
  * @brief Avalia a população de cromossomos usando o Erro Absoluto Médio (MAE).
@@ -41,30 +41,12 @@ void gerarPopulacaoInicial(cromossomo* populacao, int quantidade_individuos);
 void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int inicio, dataset data_set);
 
 /**
- * @brief Avalia a população de cromossomos usando o Erro Quadrático Médio (MSE).
- * @param populacao A lista dinâmica de cromossomos a ser avaliada.
- * @param quantidade_individuos O número de indivíduos na população.
- * @param data_set O conjunto de dados usado para avaliar os cromossomos.
+ * @brief Compara dois cromossomos com base em seu fitness para ordenação quicksort.
+ * @param a O primeiro cromossomo a ser comparado.
+ * @param b O segundo cromossomo a ser comparado.
+ * @return Um valor negativo se o primeiro cromossomo for melhor, um valor positivo se o segundo for melhor, ou zero se forem iguais.
  */
-void avaliarPopulacaoMSE(cromossomo* populacao, int quantidade_individuos, dataset data_set);
-
-/**
- * @brief Particiona a população de cromossomos para o algoritmo QuickSelect.
- * @param pop A lista dinâmica de cromossomos a ser particionada.
- * @param inicio O índice de início do segmento da população a ser considerado.
- * @param fim O índice de fim do segmento da população a ser considerado.
- * @return O índice do elemento particionado.
- */
-int particiona(cromossomo* pop, int inicio, int fim);
-
-/**
- * @brief Realiza o algoritmo de seleção QuickSelect para encontrar o k-ésimo menor elemento na população de cromossomos.
- * @param pop A lista dinâmica de cromossomos a ser processada.
- * @param inicio O índice de início do segmento da população a ser considerado.
- * @param fim O índice de fim do segmento da população a ser considerado.
- * @param k O índice do elemento a ser encontrado (0-based).
- */
-void quickSelect(cromossomo* pop, int inicio, int fim, int k);
+int compararCromossomos(const void* a, const void* b);
 
 /**
  * @brief Realiza o crossover aritmético entre os cromossomos selecionados.

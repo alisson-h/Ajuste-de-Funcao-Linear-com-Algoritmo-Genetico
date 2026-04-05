@@ -26,54 +26,49 @@ solucao* AlgoritmoGenetico(problema* p){
     int quantidade_geracoes = parametros_AG.quantidade_geracoes;
     
     cromossomo populacao[parametros_AG.quantidade_individuos];
-    gerarPopulacaoInicial(populacao, quantidade_individuos);
+    gerarPopulacaoInicial(populacao, data_set, quantidade_individuos);
     avaliarPopulacaoMAE(populacao, quantidade_individuos, 0, data_set);
-    
-    populacao[0].reta.a = 0.001;
-    populacao[0].reta.b = 1;
-    
+    qsort(populacao, quantidade_individuos, sizeof(cromossomo), compararCromossomos);
+
     // Inicializando Solucao ---------------------------------------------
     solucao* sol = ConstruirSolucaoBase(quantidade_geracoes);
     cromossomo melhor_individuo = populacao[0];
 
     // Algoritmo ---------------------------------------------------------
-    printf("\nIniciando Algoritmo Genetico...\n");
+    printf("\nIniciando AG...");
     int geracao_atual = 0;
-    for (geracao_atual = 0; geracao_atual < quantidade_geracoes; geracao_atual++){
-        
-        quickSelect(populacao, 0, quantidade_individuos - 1, quantidade_individuos_selecionados - 1);
-        quickSelect(populacao, 0, (int) quantidade_individuos * 0.6 - 1, quantidade_eletismo - 1);
-
+    while(geracao_atual < quantidade_geracoes){
         gerarNovaPopulacao(populacao, parametros_AG, quantidade_eletismo, quantidade_individuos_selecionados);
-        
         avaliarPopulacaoMAE(populacao, quantidade_individuos, quantidade_individuos_selecionados, data_set);
-        
+        qsort(populacao, quantidade_individuos, sizeof(cromossomo), compararCromossomos);
+
         melhor_individuo = populacao[0];
         if (EXIBIR_GERACOES){
             printf("G %3.d | fitness: %lf | reta: (a = %lf, b = %lf)\n",
             geracao_atual + 1, melhor_individuo.fitness, melhor_individuo.reta.a, melhor_individuo.reta.b);
         }
 
-        sol->erros[geracao_atual] = calcularMAE(melhor_individuo.reta, data_set);
+        sol->erros[geracao_atual] = melhor_individuo.fitness;
         sol->fitness[geracao_atual] = melhor_individuo.fitness;
         sol->retas[geracao_atual] = melhor_individuo.reta;
 
+        geracao_atual++;
         //Encerrar o algoritmo se encontrar a solução perfeita (fitness = 0)
         //só funciona quando os pontos coincidem perfeitamente em uma reta
-        if (fabs(sol->fitness[geracao_atual]) < 1e-9) break;
+        if (fabs(sol->fitness[geracao_atual - 1]) < 1e-9) break;
     }
     sol->geracao_final = geracao_atual;
 
-    printf("\nAlgoritmo Finalizado.\n\n");
+    printf(" Algoritmo Finalizado.\n");
 
     if (EXIBIR_INFORMACOES_FINAIS)
     {
-       printf("Melhor Fitness: %f\n\n", melhor_individuo.fitness);
+       printf("Melhor Fitness: %f | ", melhor_individuo.fitness);
         char sign = '+';
         if (melhor_individuo.reta.b <= 0) { melhor_individuo.reta.b *= -1; sign = '-'; }
-        if ( fabs(melhor_individuo.reta.a) < 1e-6) printf("Melhor Reta: y =  %c %g\n\n", sign, melhor_individuo.reta.b);
-        else if ( fabs(melhor_individuo.reta.b) < 1e-6) printf("Melhor Reta: y = %gx\n\n", melhor_individuo.reta.a);
-        else printf("Melhor Reta: %gx %c %g\n\n", melhor_individuo.reta.a, sign, melhor_individuo.reta.b);
+        if ( fabs(melhor_individuo.reta.a) < 1e-6) printf("Melhor Reta: y =  %c %g\n", sign, melhor_individuo.reta.b);
+        else if ( fabs(melhor_individuo.reta.b) < 1e-6) printf("Melhor Reta: y = %gx\n", melhor_individuo.reta.a);
+        else printf("Melhor Reta: %gx %c %g\n", melhor_individuo.reta.a, sign, melhor_individuo.reta.b);
     }
     
     return sol;
@@ -84,13 +79,31 @@ void aleatorizarCromossomo(cromossomo* cromossomo){
     cromossomo->reta.b = VALOR_ALEATORIO;
 }
 
-void gerarPopulacaoInicial(cromossomo* populacao, int quantidade_individuos){
+void gerarPopulacaoInicial(cromossomo* populacao, dataset data_set, int quantidade_individuos){
+    //25% dos indivíduos são gerados a partir de pontos aleatórios do dataset, e os outros 75% são gerados aleatoriamente
+    
+    //caso o dataset tenha apenas 2 pontos, garante que pelo menos 1 indivíduo seja gerado a partir desses pontos
+    //o que resulta no fitness 0, e o algoritmo termina imediatamente, como esperado :D
+    int idx_part = data_set.quantidade_pontos == 2 ? quantidade_individuos / 4 + 1 : quantidade_individuos / 4; 
 
-   for (int i = 0; i < quantidade_individuos; i++){
+    for (int i = 0; i < idx_part; i++){
+        ponto* p1 = &data_set.lista_pontos[rand() % data_set.quantidade_pontos];
+        ponto* p2 = &data_set.lista_pontos[rand() % data_set.quantidade_pontos];
+
+        double a = (p2->y - p1->y) / (p2->x - p1->x + 1e-12);
+        double b = p1->y - a * p1->x;
+
+        populacao[i].reta.a = a;
+        populacao[i].reta.b = b;        
+        populacao[i].fitness = -1;
+    }
+
+    for (int i = idx_part; i < quantidade_individuos; i++){
         aleatorizarCromossomo(&populacao[i]);
         populacao[i].fitness = -1;
     }
     
+
 }
 
 void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int inicio, dataset data_set){
@@ -101,45 +114,13 @@ void avaliarPopulacaoMAE(cromossomo* populacao, int quantidade_individuos, int i
     }
 }
 
-void avaliarPopulacaoMSE(cromossomo* populacao, int quantidade_individuos, dataset data_set){
-    int descarte = quantidade_individuos * 0.6;
-    for (int i = 0; i < (quantidade_individuos - descarte); i++){
-        populacao[i].fitness = calcularMSE(populacao[i].reta, data_set);
-    }
-}
+int compararCromossomos(const void* a, const void* b){
+    double fitness_a = ((cromossomo*)a)->fitness;
+    double fitness_b = ((cromossomo*)b)->fitness;
 
-int particiona(cromossomo* pop, int inicio, int fim){
-    double pivo = pop[fim].fitness;
-    int i = inicio;
-
-    for(int j = inicio; j < fim; j++){
-        if(pop[j].fitness < pivo){
-            cromossomo aux = pop[i];
-            pop[i] = pop[j];
-            pop[j] = aux;
-            i++;
-        }
-    }
-
-    cromossomo aux = pop[i];
-    pop[i] = pop[fim];
-    pop[fim] = aux;
-
-    return i;
-}
-
-void quickSelect(cromossomo* pop, int inicio, int fim, int k){
-
-    if(inicio >= fim) return;
-
-    int pos = particiona(pop, inicio, fim);
-
-    if(pos == k) return;
-
-    if(pos > k)
-        quickSelect(pop, inicio, pos - 1, k);
-    else
-        quickSelect(pop, pos + 1, fim, k);
+    if (fitness_a < fitness_b) return -1;
+    else if (fitness_a > fitness_b) return 1;
+    else return 0;
 }
 
 void crossoverPopulacao(cromossomo* populacao, int quantidade_individuos, int quantidade_selecionados, double taxa_crossover){
