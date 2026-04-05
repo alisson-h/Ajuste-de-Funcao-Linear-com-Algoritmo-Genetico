@@ -43,7 +43,7 @@ $$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
 
 Onde:
 - $y_i$ é o valor y do ponto i
-- $\hat{y}_i = a x_i + bb$ é o valor predito pela reta
+- $\hat{y}_i = a x_i + b$ é o valor predito pela reta
 - **Objetivo**: Minimizar o MAE (quanto menor, melhor a solução)
 
 <br>
@@ -347,7 +347,7 @@ Observações:
 Algoritmos e Estruturas de Dados (AEDS)
 
 ### Professor
-[Michael Pires Silva](https://github.com/mpiress)
+[Michael Pires da Silva](https://github.com/mpiress)
 
 ### 📅 Data
 05/04/2026
