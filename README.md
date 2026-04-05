@@ -1,12 +1,12 @@
 <img src="imgs/banner.png" alt="Banner" style="width:100%;"/>
 
 
-<h1 align="justify">
-Algoritmo Genético para Ajuste de Curva 
+<h1 align="center">
+Algoritmo Genético para Ajuste de Curva
 </h1>
 
 <div align="center">
-<img align="center" height="20px" width="140px" alt="C Programming Language" src="https://img.shields.io/badge/programming_language-14354C?style=for-the-badge&logo=C&labelColor=grey">
+<img  align="center" width="100px" height="20px" alt="Language C" src="https://img.shields.io/badge/language-C-blue?style=for-the-badge&logo=c">
 <img align="center" alt="Build Status" src="https://img.shields.io/badge/build-make-brightgreen?style=flat"> 
 </div>
 
@@ -19,10 +19,11 @@ Algoritmo Genético para Ajuste de Curva
 4. [Estrutura do Projeto](#estrutura-do-projeto)
 5. [Compilação e Execução](#compilação-e-execução)
 6. [Complexidade Computacional](#complexidade-computacional)
+7. [Análise do Tempo de Execução](#análise-do-tempo-de-execução)
 
 ---
 
-## Problema
+## 📌Problema
 
 ### Objetivo
 Este projeto implementa um **algoritmo genético** para resolver um problema clássico de **ajuste de curva linear**. O objetivo é encontrar os coeficientes **a** e **b** de uma reta que melhor se ajusta a um conjunto de pontos (x, y) fornecidos como entrada.
@@ -42,13 +43,13 @@ $$\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
 
 Onde:
 - $y_i$ é o valor y do ponto i
-- $\hat{y}_i = a\hat{x}_i + b$ é o valor predito pela reta
+- $\hat{y}_i = a x_i + bb$ é o valor predito pela reta
 - **Objetivo**: Minimizar o MAE (quanto menor, melhor a solução)
 
 <br>
 
 ---
-## Algoritmo Genético
+## 🧬Algoritmo Genético
 
 ### Conceitos Fundamentais
 
@@ -66,7 +67,7 @@ O **Algoritmo Genético** é um algoritmo de busca baseado em mecanismos de sele
 <img src="imgs/fluxograma.png" alt="Fluxo do Algoritmo Genético" style="width:100%;"/>
 
 ---
-## Detalhes de Implementação
+## 📝Detalhes de Implementação
 
 ### Estruturas de Dados
 
@@ -138,7 +139,7 @@ O algoritmo utiliza **qsort()** (ordenação rápida da biblioteca padrão C) pa
 - Isso garante que a melhor solução encontrada não seja perdida
 - Percentual: `PERC_ELETISMO = 0.05`
 
-**NOTA:** O método de ordenação $Quick Sort$ pode ser substituído por um método de seleção mais eficiente (como $QuickSelect$) para obter os melhores indivíduos em $O(n)$ em média, como também pode ser substituído por um método de seleção por torneio ou roleta para evitar a ordenação completa e reduzir o custo computacional.
+**NOTA:** O método de ordenação $Quick Sort$ pode ser substituído por um método de seleção mais eficiente (como $QuickSelect$ ) para obter os melhores indivíduos em $O(n)$ em média, como também pode ser substituído por um método de seleção por torneio ou roleta para evitar a ordenação completa e reduzir o custo computacional.
 
 #### 5. **Crossover Aritmético**
 O crossover combina dois pais para gerar dois filhos:
@@ -153,6 +154,8 @@ $$a_{\text{filho1}} = \alpha \cdot a_{\text{pai1}} + (1 - \alpha) \cdot a_{\text
 $$b_{\text{filho1}} = \alpha \cdot b_{\text{pai1}} + (1 - \alpha) \cdot b_{\text{pai2}}$$
 
 3. Se a probabilidade falhar (10%), filhos herdam genes dos pais sem alteração
+
+Nesse problema, o crossover aritmético mais é eficaz que o crossover tradicional pois os coeficientes a e b são valores contínuos, e a média ponderada pode gerar soluções intermediárias que podem ser melhores do que os pais originais.
 
 **Função**: `crossoverPopulacao()`
 
@@ -191,7 +194,8 @@ Onde $\Delta \in [-0.2, 0.2]$ com até 5 casas decimais
 // 3. Retornar solução com histórico de gerações
 ```
 
-## Estrutura do Projeto
+---
+## 🗂️Estrutura do Projeto
 
 ```
 PraticaAEDS/
@@ -243,7 +247,7 @@ PraticaAEDS/
 <br>
 
 ---
-## Compilação e Execução
+## 💻Compilação e Execução
 
 ### Requisitos
 - Compilador GCC
@@ -294,7 +298,7 @@ O arquivo `output.dat` contém os resultados:
 <br>
 
 ---
-## Complexidade Computacional
+## 🕒Complexidade Computacional
 
 **Notação**:
 - $n$ = Quantidade de indivíduos (tamanho da população)
@@ -312,13 +316,28 @@ O arquivo `output.dat` contém os resultados:
 | `qsort()` | $O(n \log n)$ | Ordena população por fitness |
 | **`algoritmoGenetico()`** | **$O(g(n \cdot p + n \log n))$** | Complexidade total por geração |
 
-## Convergência para $O(g \cdot n \log n)$
+### Convergência para $O(g \cdot n \log n)$
 
-Na prática, **o ordenamento da população via `qsort()` é a operação dominante**, responsável por $O(n \log n)$ a cada geração. Por isso, a complexidade asintótica converge para:
+Na prática, quando $p$ é pequeno em relação a $n$, **o ordenamento da população via `qsort()` é a operação dominante**, responsável por $O(n \log n)$ a cada geração. Por isso, a complexidade asintótica converge para:
 
 $$\boxed{O(g \cdot n \log n)}$$
 
 Onde cada uma das $g$ gerações executa uma ordenação de $n$ elementos em $O(n \log n)$.
+
+## 📊Análise do Tempo de Execução
+
+O gráfico mostra como o tempo de execução varia com a quantidade de gerações e de indivíduos.
+
+- 🔵 **Linha azul:** tempo em função do número de gerações  
+- 🔴 **Linha vermelha:** tempo em função do número de indivíduos  
+
+Observações:
+- O tempo cresce de forma **linear** com o número de gerações.
+- Com o aumento de indivíduos, o crescimento é **mais acelerado**, aproximando-se de **O(n log n)** devido ao uso do `qsort()`.
+
+> **Conclusão:** o número de indivíduos tem maior impacto no desempenho do algoritmo.
+
+<img src="imgs/grafico_tempo.png" alt=" Tempo de Execução" style="width:100%;"/>
 
 <br>
 
@@ -330,9 +349,10 @@ Algoritmos e Estruturas de Dados (AEDS)
 ### Professor
 [Michael Pires Silva](https://github.com/mpiress)
 
-### Data
+### 📅 Data
 05/04/2026
-## Autor
+
+### 👨‍💻 Autor
 
 <table>
   <tr>
