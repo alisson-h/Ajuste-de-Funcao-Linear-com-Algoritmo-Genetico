@@ -26,7 +26,7 @@ problema* lerInputParaProblema(){
     ponto p_aux;
 
     for (int i = 0; i < prob->data_set.quantidade_pontos; i++){
-        if(fscanf(arq, "%lf %lf", &p_aux.x, &p_aux.y) != EOF){
+        if(fscanf(arq, "%f %f", &p_aux.x, &p_aux.y) != EOF){
             lista_ponto[i] = p_aux;
         }
     }
