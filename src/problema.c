@@ -7,18 +7,18 @@
 problema* ConstruirProblemaBase(int n, int m, int g){
     problema* p = (problema *) malloc(sizeof(problema));;
 
-    //p.data_set.lista_pontos = lista_pontos;
     p->data_set.quantidade_pontos = n;
 
     p->parametros_AG.quantidade_individuos = m;
     p->parametros_AG.quantidade_geracoes = g;
     
-    //-- A ser decidido
+    //-- Predefinidos, podem ser editados posteriormente ----------------------
     p->parametros_AG.taxa_mutacao = 0.05;
     p->parametros_AG.taxa_crossover = 0.90;
 
     return p;
 }
+
 solucao* ConstruirSolucaoBase(int quantidade_geracoes){
     solucao* sol = (solucao *) malloc(sizeof(solucao));
     sol->erros = (double *) malloc(sizeof(double) * quantidade_geracoes);
@@ -42,9 +42,9 @@ float calcularMAE(reta reta, dataset data_set){
 
     for (int i = 0; i < data_set.quantidade_pontos; i++)
     {
-        ponto ponto = data_set.lista_pontos[i];
+        ponto* ponto = &data_set.lista_pontos[i];
         
-        float resultado = ponto.y - calcularYReta(reta, ponto.x);
+        float resultado = ponto->y - calcularYReta(&reta, ponto->x);
         if (resultado < 0) resultado *= -1;
         
         MAE += resultado;
@@ -53,24 +53,6 @@ float calcularMAE(reta reta, dataset data_set){
     MAE /= data_set.quantidade_pontos;
 
     return MAE;
-}
-
-float calcularMSE(reta reta, dataset data_set){
-    float MSE = 0;
-
-    for (int i = 0; i < data_set.quantidade_pontos; i++)
-    {
-        ponto ponto = data_set.lista_pontos[i];
-        
-        float resultado = ponto.y - calcularYReta(reta, ponto.x);
-        resultado *= resultado;
-        
-        MSE += resultado;
-    }
-
-    MSE /= data_set.quantidade_pontos;
-
-    return MSE;
 }
 
 void ExibirProblema(problema* problema){
@@ -105,15 +87,4 @@ ponto criarPontoAleatorio(){
     novoPonto.y = (rand() % (2 * TAMANHO_ESPACIAL + 1)) - TAMANHO_ESPACIAL;
 
     return novoPonto;
-}
-
-// RETA (y = ax + b) -----------------------------------------------------
-
-float calcularXReta(reta reta, float y){
-    if (reta.a) return 9999999; //Tratar depois
-    return (y - reta.b)/reta.a;
-}
-
-float calcularYReta(reta reta, float x){
-    return reta.a * x + reta.b;
 }

@@ -15,14 +15,14 @@ typedef struct {
 
 // PONTO (x, y) ----------------------------------------------------------
 typedef struct geo_0{
-    double x;
-    double y;
+    float x;
+    float y;
 }ponto;
 
 // RETA (y = ax + b) -----------------------------------------------------
 typedef struct {
-    double a;
-    double b;
+    float a;
+    float b;
 }reta;
 
 // DATA SET --------------------------------------------------------------
@@ -75,11 +75,6 @@ void deletarSolucao(solucao* solucao);
 float calcularMAE(reta reta, dataset data_set);
 
 /**
- * @brief Calcula o Erro Quadrático Médio (MSE) para uma reta e um conjunto de dados.
- */
-float calcularMSE(reta reta, dataset data_set);
-
-/**
  * @brief Cria um ponto com as coordenadas x e y fornecidas.
  * @return O ponto criado.
  */
@@ -92,15 +87,12 @@ ponto criarPonto(int x, int y);
 ponto criarPontoAleatorio();
 
 /**
- * @brief Calcula o valor de x para uma reta com o valor de y fornecido.
- * @return O valor de x calculado.
- */
-float calcularXReta(reta reta, float y);
-
-/**
  * @brief Calcula o valor de y para uma reta com o valor de x fornecido.
+ * usa o metodo inline para otimizar a função, já que ela é chamada muitas vezes durante a execução do algoritmo genético.
  * @return O valor de y calculado.
  */
-float calcularYReta(reta reta, float x);
+static inline float calcularYReta(reta* reta, float x){
+    return reta->a * x + reta->b;
+}
 
 #endif
